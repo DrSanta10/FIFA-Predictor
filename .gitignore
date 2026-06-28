@@ -1,0 +1,26 @@
+# Large downloaded historical dataset -- re-fetched by `python main.py update`,
+# no need to bloat the repo with it.
+data/raw/*.csv
+!data/raw/.gitkeep
+
+# Note: data/processed/ (elo_ratings.json, predictions.csv, group_tables.csv)
+# is intentionally NOT ignored -- the GitHub Action commits these daily so
+# the latest predictions are visible directly in the repo.
+
+# Manual result overrides are environment-specific
+data/raw/manual_results.csv
+
+# Logs
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
