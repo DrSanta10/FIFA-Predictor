@@ -252,7 +252,7 @@ fifa-predictor/
 Being upfront about these so you know exactly what you're looking at
 (and where the obvious next improvements are):
 
-- **Group tiebreakers**: standings use points → goal difference → goals
+- **Group tiebreakers**: standings use points -> goal difference -> goals
   scored, which covers FIFA's first three tiebreak criteria. Head-to-head
   results and disciplinary (fair-play) points aren't modelled, so in a
   three-way tiebreak edge case the table here could differ from the
