@@ -13,35 +13,35 @@ prediction core is solid (see [Roadmap](#roadmap)).
 ```
                  ┌─────────────────────────┐
                  │ historical_results.csv  │   1872 -> today, incl. live
-                 │ (auto-downloaded)        │   2026 World Cup fixtures
-                 └────────────┬─────────────┘
+                 │ (auto-downloaded)       │   2026 World Cup fixtures
+                 └────────────┬────────────┘
                               │
                     chronological replay
                               ▼
                  ┌─────────────────────────┐
-                 │   Elo rating engine      │  src/elo.py
-                 │ (every team's strength)  │
-                 └────────────┬─────────────┘
+                 │   Elo rating engine     │  src/elo.py
+                 │ (every team's strength) │
+                 └────────────┬────────────┘
                               │ rating gap + outcome,
                               │ for every historical match
                               ▼
                  ┌─────────────────────────┐
-                 │  Outcome probability     │  src/outcome_model.py
-                 │  model (logistic regr.)  │  rating gap -> P(H)/P(D)/P(A)
-                 └────────────┬─────────────┘
+                 │  Outcome probability    │  src/outcome_model.py
+                 │  model (logistic regr.) │  rating gap -> P(H)/P(D)/P(A)
+                 └────────────┬────────────┘
                               │
                   ┌───────────┴────────────┐
                   ▼                        ▼
-       ┌─────────────────────┐   ┌─────────────────────────┐
-       │      Predictor        │   │   Knockout bracket       │  src/bracket.py
-       │ src/predictor.py       │   │   (Round of 32 -> Final) │
+       ┌────────────────────────┐   ┌──────────────────────────┐
+       │      Predictor         │   │   Knockout bracket       │  src/bracket.py
+       │     src/predictor.py   │   │   (Round of 32 -> Final) │
        │ - every remaining match│   │   official bracket tree, │
        │ - group-stage Monte    │   │   Monte Carlo simulation │
-       │   Carlo                │   └─────────────────────────┘
-       └─────────────────────┘
-                              │
-                              ▼
-                      main.py (CLI)
+       │   Carlo                │   └──────────────────────────┘
+       └────────────────────────┘
+                                  │
+                                  ▼
+                            main.py (CLI)
 ```
 
 1. **Data**: a community-maintained, continuously-updated CSV of every
@@ -82,8 +82,6 @@ prediction core is solid (see [Roadmap](#roadmap)).
 ## Setup
 
 ```bash
-git clone <your-repo-url>
-cd fifa-predictor
 pip install -r requirements.txt
 python main.py update
 ```
@@ -303,11 +301,3 @@ Being upfront about these so you know exactly what you're looking at
   dataset is False. The US/Mexico/Canada teams get a genuine home boost
   for matches in their own country; everyone else plays at a
   designated-neutral venue per the dataset.
-
-## Roadmap
-
-- [x] Knockout bracket Monte Carlo (Round of 32 -> Final)
-- [x] Third-place play-off simulation
-- [x] Track prediction accuracy over time (logged automatically by `update`; see `accuracy`)
-- [x] Simple terminal dashboard (`python main.py dashboard`, built with `rich`)
-- [ ] GUI (Streamlit or a small Flask/React app) once the CLI is battle-tested
