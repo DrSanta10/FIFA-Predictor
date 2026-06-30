@@ -175,27 +175,12 @@ def cmd_accuracy(args: argparse.Namespace) -> None:
 
 
 def cmd_add_result(args: argparse.Namespace) -> None:
-    config.RAW_DIR.mkdir(parents=True, exist_ok=True)
-    row = {
-        "date": args.date,
-        "home_team": args.home,
-        "away_team": args.away,
-        "home_score": args.home_score,
-        "away_score": args.away_score,
-        "tournament": config.TOURNAMENT_NAME,
-        "city": args.city or "",
-        "country": args.country or "",
-        "neutral": args.neutral,
-        "shootout_winner": args.shootout_winner or "",
-    }
-    if config.MANUAL_RESULTS_FILE.exists():
-        existing = pd.read_csv(config.MANUAL_RESULTS_FILE)
-        if "shootout_winner" not in existing.columns:
-            existing["shootout_winner"] = ""
-        existing = pd.concat([existing, pd.DataFrame([row])], ignore_index=True)
-    else:
-        existing = pd.DataFrame([row])
-    existing.to_csv(config.MANUAL_RESULTS_FILE, index=False)
+    data_loader.append_manual_result(
+        home=args.home, away=args.away,
+        home_score=args.home_score, away_score=args.away_score,
+        date=args.date, neutral=args.neutral, shootout_winner=args.shootout_winner,
+        city=args.city or "", country=args.country or "",
+    )
     print(f"Recorded: {args.date}  {args.home} {args.home_score} - {args.away_score} {args.away}")
     if args.shootout_winner:
         print(f"  Shootout winner: {args.shootout_winner}")

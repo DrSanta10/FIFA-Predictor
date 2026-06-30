@@ -144,6 +144,39 @@ def _apply_manual_overrides(df: pd.DataFrame) -> pd.DataFrame:
     return df.sort_values("date", kind="stable").reset_index(drop=True)
 
 
+def append_manual_result(home: str, away: str, home_score: int, away_score: int,
+                          date: str | None = None, neutral: bool = True,
+                          shootout_winner: str | None = None,
+                          city: str = "", country: str = "") -> None:
+    """Record a result that isn't in the upstream dataset yet (see
+    `main.py add-result` for the CLI entry point -- this is the shared
+    logic behind it, also used by the web GUI's "Add result" form).
+    """
+    from datetime import date as _date
+
+    config.RAW_DIR.mkdir(parents=True, exist_ok=True)
+    row = {
+        "date": date or _date.today().isoformat(),
+        "home_team": home,
+        "away_team": away,
+        "home_score": home_score,
+        "away_score": away_score,
+        "tournament": config.TOURNAMENT_NAME,
+        "city": city,
+        "country": country,
+        "neutral": neutral,
+        "shootout_winner": shootout_winner or "",
+    }
+    if config.MANUAL_RESULTS_FILE.exists():
+        existing = pd.read_csv(config.MANUAL_RESULTS_FILE)
+        if "shootout_winner" not in existing.columns:
+            existing["shootout_winner"] = ""
+        existing = pd.concat([existing, pd.DataFrame([row])], ignore_index=True)
+    else:
+        existing = pd.DataFrame([row])
+    existing.to_csv(config.MANUAL_RESULTS_FILE, index=False)
+
+
 def get_tournament(df: pd.DataFrame,
                     name: str = config.TOURNAMENT_NAME,
                     year: int = config.TOURNAMENT_YEAR) -> pd.DataFrame:

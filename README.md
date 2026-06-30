@@ -236,6 +236,10 @@ fifa-predictor/
 │   ├── raw/                 # downloaded + manually-entered results
 │   └── processed/           # elo_ratings.json, predictions.csv, group_tables.csv,
 │                            # bracket_odds.csv, prediction_log.csv
+├── webapp/
+│   ├── app.py                # Flask backend (thin -- calls into src/)
+│   ├── templates/index.html
+│   └── static/css/style.css, static/js/app.js
 └── src/
     ├── data_loader.py       # download / parse / filter match data
     ├── elo.py               # Elo rating engine
@@ -246,6 +250,72 @@ fifa-predictor/
     ├── tracking.py          # prediction accuracy log over time
     └── dashboard.py         # single-screen rich terminal overview
 ```
+
+## Web GUI
+
+A full browser-based dashboard, built on top of the exact same `src/`
+modules the CLI uses -- the GUI and `python main.py` are always looking
+at the same engine, never two competing implementations of "what does
+the model think."
+
+```bash
+python webapp/app.py
+```
+
+Then open **http://127.0.0.1:5000**.
+
+What it gives you, across six tabs:
+
+- **Overview** -- top Elo rankings and title odds with a gradient
+  confidence bar, plus a hero panel leading with the single most
+  characteristic fact: who the model currently favours to win it all.
+- **Standings** -- all 12 groups, qualification spots (top 2)
+  highlighted.
+- **Predictions** -- every remaining match with win/draw/loss
+  probabilities, filterable by group stage vs. knockout.
+- **Bracket** -- each team's probability of reaching the Round of 16,
+  quarters, semis, the Final, third place, and the title itself.
+- **Accuracy** -- the same accuracy-over-time tracking as `main.py
+  accuracy`, plus a banner for any match still awaiting a
+  shootout-winner.
+- **Add result** -- record a result the data source hasn't picked up
+  yet, right from the browser, with a conditional field for the
+  shootout winner when scores come in level on a knockout match. This
+  calls the exact same `data_loader.append_manual_result` function the
+  CLI's `add-result` command uses, so the two stay in sync.
+
+The **Refresh data** button in the header re-downloads the dataset and
+recomputes everything (same as `python main.py update`), so you can run
+the whole daily workflow without touching a terminal.
+
+### Design notes
+
+The visual identity -- a warm gold-to-coral gradient against a deep
+indigo-navy backdrop -- is meant to evoke stadium floodlights at dusk,
+reused consistently everywhere a probability appears (the hero panel,
+every confidence bar) as the one deliberate signature, rather than
+scattered across unrelated effects. Team names use a condensed display
+face (Oswald) partly for character, partly because it's the only
+typeface choice that comfortably fits "Bosnia and Herzegovina" in a
+narrow table column without wrapping.
+
+### Architecture
+
+`webapp/app.py` is a thin Flask layer: it has no prediction logic of
+its own, only routes that call into `src/` and serialize the result as
+JSON. The frontend (`webapp/static/js/app.js`) is plain JavaScript --
+no framework -- since this is a small, single-purpose dashboard. The
+backend caches the computed model state in memory (a full rebuild --
+Elo replay, the outcome model, a 10,000-run bracket simulation -- takes
+about a second) and only recomputes it on an explicit refresh or a new
+result being recorded, so `GET /api/snapshot` stays fast.
+
+One thing to know if you extend this: Python's `json` module accepts a
+literal `NaN` token as a non-standard extension (which happens whenever
+`accuracy.summary` has a slice with 0 resolved matches), but a
+browser's `JSON.parse` does not and throws on it. `app.py` runs every
+response through a recursive NaN-to-`null` sanitizer before calling
+`jsonify` -- worth knowing if you add a new field that might be `NaN`.
 
 ## Methodology notes & known limitations
 
@@ -310,4 +380,4 @@ Being upfront about these so you know exactly what you're looking at
 - [x] Third-place play-off simulation
 - [x] Track prediction accuracy over time (logged automatically by `update`; see `accuracy`)
 - [x] Simple terminal dashboard (`python main.py dashboard`, built with `rich`)
-- [ ] GUI (Streamlit or a small Flask/React app) once the CLI is battle-tested
+- [x] GUI (Flask + a custom dashboard, see below)

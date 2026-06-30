@@ -1,5 +1,5 @@
 date_logged,match_date,home_team,away_team,is_knockout,elo_home,elo_away,home_win_prob,draw_prob,away_win_prob,predicted_winner,actual_outcome,actual_winner,correct,brier_score,notes
-2026-06-28,2026-06-28,South Africa,Canada,True,1711.7,1845.3,0.2309,0.2609,0.5082,Canada,,,,,
+2026-06-28,2026-06-28,South Africa,Canada,True,1711.7,1845.3,0.2309,0.2609,0.5082,Canada,A,Canada,1,0.261148,
 2026-06-28,2026-06-29,Brazil,Japan,True,2089.9,1982.6,0.5252,0.2534,0.2215,Brazil,,,,,
 2026-06-28,2026-06-29,Germany,Paraguay,True,1996.4,1894.4,0.5185,0.2549,0.2267,Germany,,,,,
 2026-06-28,2026-06-29,Netherlands,Morocco,True,2042.4,2014.0,0.4234,0.2699,0.3067,Netherlands,,,,,
