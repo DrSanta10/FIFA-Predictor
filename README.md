@@ -13,35 +13,35 @@ prediction core is solid (see [Roadmap](#roadmap)).
 ```
                  ┌─────────────────────────┐
                  │ historical_results.csv  │   1872 -> today, incl. live
-                 │ (auto-downloaded)        │   2026 World Cup fixtures
-                 └────────────┬─────────────┘
+                 │ (auto-downloaded)       │   2026 World Cup fixtures
+                 └────────────┬────────────┘
                               │
                     chronological replay
                               ▼
                  ┌─────────────────────────┐
-                 │   Elo rating engine      │  src/elo.py
-                 │ (every team's strength)  │
-                 └────────────┬─────────────┘
+                 │   Elo rating engine     │  src/elo.py
+                 │ (every team's strength) │
+                 └────────────┬────────────┘
                               │ rating gap + outcome,
                               │ for every historical match
                               ▼
                  ┌─────────────────────────┐
-                 │  Outcome probability     │  src/outcome_model.py
-                 │  model (logistic regr.)  │  rating gap -> P(H)/P(D)/P(A)
-                 └────────────┬─────────────┘
+                 │  Outcome probability    │  src/outcome_model.py
+                 │  model (logistic regr.) │  rating gap -> P(H)/P(D)/P(A)
+                 └────────────┬────────────┘
                               │
                   ┌───────────┴────────────┐
                   ▼                        ▼
-       ┌─────────────────────┐   ┌─────────────────────────┐
-       │      Predictor        │   │   Knockout bracket       │  src/bracket.py
-       │ src/predictor.py       │   │   (Round of 32 -> Final) │
+       ┌────────────────────────┐   ┌──────────────────────────┐
+       │      Predictor         │   │   Knockout bracket       │  src/bracket.py
+       │     src/predictor.py   │   │   (Round of 32 -> Final) │
        │ - every remaining match│   │   official bracket tree, │
        │ - group-stage Monte    │   │   Monte Carlo simulation │
-       │   Carlo                │   └─────────────────────────┘
-       └─────────────────────┘
-                              │
-                              ▼
-                      main.py (CLI)
+       │   Carlo                │   └──────────────────────────┘
+       └────────────────────────┘
+                                  │
+                                  ▼
+                            main.py (CLI)
 ```
 
 1. **Data**: a community-maintained, continuously-updated CSV of every
@@ -82,8 +82,6 @@ prediction core is solid (see [Roadmap](#roadmap)).
 ## Setup
 
 ```bash
-git clone <your-repo-url>
-cd fifa-predictor
 pip install -r requirements.txt
 python main.py update
 ```
@@ -236,10 +234,6 @@ fifa-predictor/
 │   ├── raw/                 # downloaded + manually-entered results
 │   └── processed/           # elo_ratings.json, predictions.csv, group_tables.csv,
 │                            # bracket_odds.csv, prediction_log.csv
-├── webapp/
-│   ├── app.py                # Flask backend (thin -- calls into src/)
-│   ├── templates/index.html
-│   └── static/css/style.css, static/js/app.js
 └── src/
     ├── data_loader.py       # download / parse / filter match data
     ├── elo.py               # Elo rating engine
@@ -251,78 +245,12 @@ fifa-predictor/
     └── dashboard.py         # single-screen rich terminal overview
 ```
 
-## Web GUI
-
-A full browser-based dashboard, built on top of the exact same `src/`
-modules the CLI uses -- the GUI and `python main.py` are always looking
-at the same engine, never two competing implementations of "what does
-the model think."
-
-```bash
-python webapp/app.py
-```
-
-Then open **http://127.0.0.1:5000**.
-
-What it gives you, across six tabs:
-
-- **Overview** -- top Elo rankings and title odds with a gradient
-  confidence bar, plus a hero panel leading with the single most
-  characteristic fact: who the model currently favours to win it all.
-- **Standings** -- all 12 groups, qualification spots (top 2)
-  highlighted.
-- **Predictions** -- every remaining match with win/draw/loss
-  probabilities, filterable by group stage vs. knockout.
-- **Bracket** -- each team's probability of reaching the Round of 16,
-  quarters, semis, the Final, third place, and the title itself.
-- **Accuracy** -- the same accuracy-over-time tracking as `main.py
-  accuracy`, plus a banner for any match still awaiting a
-  shootout-winner.
-- **Add result** -- record a result the data source hasn't picked up
-  yet, right from the browser, with a conditional field for the
-  shootout winner when scores come in level on a knockout match. This
-  calls the exact same `data_loader.append_manual_result` function the
-  CLI's `add-result` command uses, so the two stay in sync.
-
-The **Refresh data** button in the header re-downloads the dataset and
-recomputes everything (same as `python main.py update`), so you can run
-the whole daily workflow without touching a terminal.
-
-### Design notes
-
-The visual identity -- a warm gold-to-coral gradient against a deep
-indigo-navy backdrop -- is meant to evoke stadium floodlights at dusk,
-reused consistently everywhere a probability appears (the hero panel,
-every confidence bar) as the one deliberate signature, rather than
-scattered across unrelated effects. Team names use a condensed display
-face (Oswald) partly for character, partly because it's the only
-typeface choice that comfortably fits "Bosnia and Herzegovina" in a
-narrow table column without wrapping.
-
-### Architecture
-
-`webapp/app.py` is a thin Flask layer: it has no prediction logic of
-its own, only routes that call into `src/` and serialize the result as
-JSON. The frontend (`webapp/static/js/app.js`) is plain JavaScript --
-no framework -- since this is a small, single-purpose dashboard. The
-backend caches the computed model state in memory (a full rebuild --
-Elo replay, the outcome model, a 10,000-run bracket simulation -- takes
-about a second) and only recomputes it on an explicit refresh or a new
-result being recorded, so `GET /api/snapshot` stays fast.
-
-One thing to know if you extend this: Python's `json` module accepts a
-literal `NaN` token as a non-standard extension (which happens whenever
-`accuracy.summary` has a slice with 0 resolved matches), but a
-browser's `JSON.parse` does not and throws on it. `app.py` runs every
-response through a recursive NaN-to-`null` sanitizer before calling
-`jsonify` -- worth knowing if you add a new field that might be `NaN`.
-
 ## Methodology notes & known limitations
 
 Being upfront about these so you know exactly what you're looking at
 (and where the obvious next improvements are):
 
-- **Group tiebreakers**: standings use points → goal difference → goals
+- **Group tiebreakers**: standings use points -> goal difference -> goals
   scored, which covers FIFA's first three tiebreak criteria. Head-to-head
   results and disciplinary (fair-play) points aren't modelled, so in a
   three-way tiebreak edge case the table here could differ from the
@@ -373,11 +301,3 @@ Being upfront about these so you know exactly what you're looking at
   dataset is False. The US/Mexico/Canada teams get a genuine home boost
   for matches in their own country; everyone else plays at a
   designated-neutral venue per the dataset.
-
-## Roadmap
-
-- [x] Knockout bracket Monte Carlo (Round of 32 -> Final)
-- [x] Third-place play-off simulation
-- [x] Track prediction accuracy over time (logged automatically by `update`; see `accuracy`)
-- [x] Simple terminal dashboard (`python main.py dashboard`, built with `rich`)
-- [x] GUI (Flask + a custom dashboard, see below)
