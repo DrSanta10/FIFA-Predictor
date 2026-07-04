@@ -416,11 +416,3 @@ Being upfront about these so you know exactly what you're looking at
   dataset is False. The US/Mexico/Canada teams get a genuine home boost
   for matches in their own country; everyone else plays at a
   designated-neutral venue per the dataset.
-
-## Roadmap
-
-- [x] Knockout bracket Monte Carlo (Round of 32 -> Final)
-- [x] Third-place play-off simulation
-- [x] Track prediction accuracy over time (logged automatically by `update`; see `accuracy`)
-- [x] Simple terminal dashboard (`python main.py dashboard`, built with `rich`)
-- [x] GUI (Flask + a custom dashboard, see below)
