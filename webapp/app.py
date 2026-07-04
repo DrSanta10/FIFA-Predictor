@@ -23,6 +23,7 @@ Endpoints:
 from __future__ import annotations
 
 import math
+import os
 import sys
 from pathlib import Path
 
@@ -36,7 +37,19 @@ from src.bracket import simulate_knockout
 from src.dashboard import describe_stage
 from src.predictor import Predictor
 
-app = Flask(__name__)
+# When running as a PyInstaller bundle, templates and static files
+# are extracted to sys._MEIPASS (not next to app.py). We need to
+# tell Flask their absolute paths explicitly.
+if getattr(sys, "frozen", False):
+    _root = Path(sys._MEIPASS)
+else:
+    _root = Path(__file__).resolve().parent.parent
+
+app = Flask(
+    __name__,
+    template_folder=str(_root / "webapp" / "templates"),
+    static_folder=str(_root / "webapp" / "static"),
+)
 
 
 def _sanitize(obj):

@@ -4,13 +4,24 @@ Keeping these values in one place makes the system easy to retarget at a
 different tournament (e.g. Euro 2028, World Cup 2030) later on.
 """
 
+import os
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
 # Paths
 # ---------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "data"
+
+# When running as a PyInstaller bundle, __file__ resolves to a path inside
+# sys._MEIPASS, which is a read-only temp directory extracted at runtime.
+# Data files (CSVs, JSON, logs) must live somewhere writable -- next to the
+# .exe. The launcher sets FIFA_DATA_DIR to os.path.dirname(sys.executable)
+# before importing anything, so config.py picks it up here. In development
+# (python main.py, or python webapp/app.py) the env var is not set and
+# paths fall back to BASE_DIR as before, so the CLI workflow is unchanged.
+_data_root = Path(os.environ["FIFA_DATA_DIR"]) if "FIFA_DATA_DIR" in os.environ else BASE_DIR
+
+DATA_DIR = _data_root / "data"
 RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"
 
