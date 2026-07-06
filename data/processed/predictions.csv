@@ -1,8 +1,7 @@
 date,home_team,away_team,elo_home,elo_away,home_win_prob,draw_prob,away_win_prob,predicted_winner,is_knockout
-2026-07-05,Brazil,Norway,2111.0,1975.3,0.5608,0.2446,0.1945,Brazil,True
-2026-07-05,Mexico,England,2036.9,2107.5,0.4127,0.2919,0.2955,Mexico,True
-2026-07-06,Portugal,Spain,2051.4,2206.5,0.2096,0.2556,0.5348,Spain,True
-2026-07-06,United States,Belgium,1885.1,2010.8,0.3444,0.2959,0.3598,Belgium,True
-2026-07-06,Argentina,Egypt,2221.0,1869.2,0.7801,0.1585,0.0614,Argentina,True
-2026-07-06,Switzerland,Colombia,2013.2,2083.6,0.3003,0.2714,0.4283,Colombia,True
-2026-07-09,France,Morocco,2197.9,2047.3,0.5791,0.2396,0.1813,France,True
+2026-07-06,Portugal,Spain,2051.4,2206.5,0.2096,0.2555,0.5349,Spain,True
+2026-07-06,United States,Belgium,1885.1,2010.8,0.3444,0.2958,0.3598,Belgium,True
+2026-07-06,Argentina,Egypt,2221.0,1869.2,0.78,0.1585,0.0614,Argentina,True
+2026-07-06,Switzerland,Colombia,2013.2,2083.6,0.3002,0.2713,0.4285,Colombia,True
+2026-07-09,France,Morocco,2197.9,2047.3,0.579,0.2396,0.1814,France,True
+2026-07-11,Norway,England,2037.0,2140.0,0.2632,0.2669,0.4699,England,True
