@@ -35,8 +35,9 @@ date_logged,match_date,home_team,away_team,is_knockout,elo_home,elo_away,home_wi
 2026-07-03,2026-07-06,Portugal,Spain,True,2051.4,2206.5,0.2097,0.2556,0.5347,Spain,A,Spain,1,0.227813,
 2026-07-03,2026-07-06,United States,Belgium,True,1885.1,2010.8,0.3444,0.2959,0.3597,Belgium,A,Belgium,1,0.484817,
 >>>>>>> 77327f82280b1741124472a79cd3719d22814bfa,,,,,,,,,,,,,,,
-2026-07-04,2026-07-06,Argentina,Egypt,True,2221.0,1869.2,0.7801,0.1585,0.0614,Argentina,,,,,
-2026-07-04,2026-07-06,Switzerland,Colombia,True,2013.2,2083.6,0.3004,0.2714,0.4282,Colombia,,,,,
+2026-07-04,2026-07-06,Argentina,Egypt,True,2221.0,1869.2,0.7801,0.1585,0.0614,Argentina,H,Argentina,1,0.039565,
+2026-07-04,2026-07-06,Switzerland,Colombia,True,2013.2,2083.6,0.3004,0.2714,0.4282,Colombia,,,,,"Awaiting shootout winner -- run `main.py add-result ""Switzerland"" ""Colombia"" 0 0 --shootout-winner TeamName`"
 2026-07-05,2026-07-09,France,Morocco,True,2197.9,2047.3,0.5791,0.2396,0.1813,France,,,,,
 2026-07-06,2026-07-11,Norway,England,True,2037.0,2140.0,0.2632,0.2669,0.4699,England,,,,,
 2026-07-07,2026-07-10,Spain,Belgium,True,2223.9,2059.4,0.5957,0.2347,0.1697,Spain,,,,,
+2026-07-08,2026-07-11,Argentina,Switzerland,True,2228.0,2019.2,0.6464,0.2178,0.1358,Argentina,,,,,
