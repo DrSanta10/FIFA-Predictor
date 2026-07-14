@@ -1,3 +1,5 @@
 date,home_team,away_team,elo_home,elo_away,home_win_prob,draw_prob,away_win_prob,predicted_winner,is_knockout
-2026-07-11,Norway,England,2016.4,2140.0,0.2412,0.263,0.4958,England,True
-2026-07-11,Argentina,Switzerland,2228.0,2019.2,0.6465,0.2177,0.1358,Argentina,True
+2026-07-14,France,Spain,2224.5,2240.7,0.3663,0.2732,0.3604,France,True
+2026-07-15,England,Argentina,2159.8,2248.8,0.2787,0.269,0.4523,Argentina,True
+2026-07-18,,,1500.0,1500.0,0.3869,0.2725,0.3406,,True
+2026-07-19,,,1500.0,1500.0,0.3869,0.2725,0.3406,,True
