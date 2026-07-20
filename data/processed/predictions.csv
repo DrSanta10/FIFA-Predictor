@@ -1,2 +1,1 @@
 date,home_team,away_team,elo_home,elo_away,home_win_prob,draw_prob,away_win_prob,predicted_winner,is_knockout
-2026-07-19,Spain,Argentina,2283.7,2271.4,0.4023,0.2714,0.3263,Spain,True
